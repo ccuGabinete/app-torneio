@@ -31,7 +31,7 @@ export class AppModule implements DoBootstrap {
     keycloakService
       .init({
         config: {
-          url: 'http://200.98.203.35/auth/',
+          url: 'http://adrenalinamaxima.com.br/auth/',
           realm: 'Liga dos Campeões da Sinuca',
           clientId: 'torneio-inscricao'
         },
