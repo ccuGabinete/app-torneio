@@ -5,3 +5,9 @@
 .cards {
     height: 14rem;
 }
+
+@media (max-width: 576px) {
+    .home {
+        margin-top: 4rem;
+    }
+}
