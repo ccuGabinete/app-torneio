@@ -3,13 +3,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './pages/home/home.component';
 
 
 const keycloakService = new KeycloakService();
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +31,7 @@ export class AppModule implements DoBootstrap {
     keycloakService
       .init({
         config: {
-          url: 'http://adrenalinamaxima.com.br/auth/',
+          url: 'http://200.98.203.35/auth/',
           realm: 'Liga dos Campeões da Sinuca',
           clientId: 'torneio-inscricao'
         },
