@@ -1,0 +1,16 @@
+.distDiv {
+    margin-top: 2rem;
+}
+
+.header {
+    text-align: center;
+    font-size: 1em;
+    margin: 1em 0 1em 0;
+    border-style: solid;
+    border-width: 1pt;
+    padding: 0.7em;
+}
+
+.cfpErro {
+    color: red;
+}

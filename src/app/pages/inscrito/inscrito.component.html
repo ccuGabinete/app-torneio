@@ -1,0 +1,51 @@
+<div class="container">
+  <div id="cpfInscrito">
+    <form>
+      <div class="form-group">
+        <label for="cpf">CPF</label>
+        <input type="text" class="form-control" id="cpf" aria-describedby="cpf" placeholder="Infomre um CPF válido"
+          mask="000.000.000-00" [(ngModel)]="inscrito.cpf" name="cpf" (focus)='onFocusCPF()'>
+      </div>
+      <button type="button" class="btn btn-info btn-lg btn-block" (click)="onFindCPF(inscrito.cpf)" id="findCPF">Verificar
+        CPF</button>
+    </form>
+  </div>
+
+  <div id="cpfErro" class="header" *ngIf='mostrarErro'>
+    <span class="cfpErro">CPF NÃO LOCALIZADO!</span>
+  </div>
+
+  <div id="dadosInscrito" class="distDiv" *ngIf='mostrarDados'>
+    <h5 class="header">DADOS DA INSCRIÇÃO</h5>
+
+    <form>
+      <div class="form-group">
+        <label for="nome">Nome Completo</label>
+        <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nome"
+          [(ngModel)]="inscrito.nome" disabled>
+      </div>
+
+      <div class="form-group">
+        <label for="nascimento">Data de Nascimento</label>
+        <input type="text" class="form-control" id="nascimento" name="nascimento" aria-describedby="nascimento"
+          [(ngModel)]="inscrito.nascimento" disabled>
+      </div>
+
+      <div class="form-group">
+        <label for="apelido">Nome de Jogador</label>
+        <input type="text" class="form-control" id="apelido" name="apelido" aria-describedby="apelido"
+          [(ngModel)]="inscrito.apelido" placeholder="Informe seu nome de jogador">
+      </div>
+
+
+      <div class="form-group">
+        <label for="email">Endereço de email</label>
+        <input type="email" class="form-control" id="email" name="apelido" aria-describedby="email"
+          [(ngModel)]="inscrito.email" placeholder="Informe seu email">
+      </div>
+
+      <button type="button" class="btn btn-info btn-lg btn-block" (click)="fillTest(inscrito)" id="gerarCodigo">Gerar Código</button>
+    </form>
+  </div>
+
+</div>
