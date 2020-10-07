@@ -8,14 +8,17 @@ import { ClubeComponent } from './pages/clube/clube.component';
 import { BarComponent } from './pages/bar/bar.component';
 import { InscritoComponent } from './pages/inscrito/inscrito.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask'
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { Inscrito } from './models/inscrito';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { Local } from './models/local';
+import { Equipe } from './models/equipe';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -38,11 +41,13 @@ const keycloakService = new KeycloakService();
     BrowserModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     KeycloakAngularModule,
     NgxMaskModule.forRoot(),
     HttpClientModule,
     MatDialogModule,
+    MatIconModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -54,6 +59,8 @@ const keycloakService = new KeycloakService();
   ],
   providers: [
     Inscrito,
+    Local,
+    Equipe,
     {
       provide: KeycloakService,
       useValue: keycloakService,

@@ -1,22 +1,24 @@
 <div class="container">
   <div id="cpfInscrito">
     <form>
-      <div class="form-group">
+      <div class="form-group" [formGroup]="emailForm">
         <label for="cpf">CPF</label>
         <input type="text" class="form-control" id="cpf" aria-describedby="cpf" placeholder="Infomre um CPF válido"
-          mask="000.000.000-00" [(ngModel)]="inscrito.cpf" name="cpf" (focus)='onFocusCPF()'>
+          mask="000.000.000-00" [(ngModel)]="inscrito.cpf" name="cpf" (focus)='onFocusCPF()' formControlName="cpf">
+        <span class="cfpErro" *ngIf="h.invalid  &&  h.touched">Informe o CPF</span>
       </div>
-      <button type="button" class="btn btn-info btn-lg btn-block" (click)="onFindCPF(inscrito.cpf)" id="findCPF">Verificar
-        CPF</button>
+      <button type="button" class="btn btn-info btn-lg btn-block" (click)="onFindCPF(inscrito.cpf)" id="findCPF">
+        <mat-icon>search</mat-icon>
+      </button>
     </form>
   </div>
 
-  <div id="cpfErro" class="header" *ngIf='mostrarErro'>
+  <div id="cpfErro" class="header" *ngIf='mostrarErro && !h.invalid'>
     <span class="cfpErro">CPF NÃO LOCALIZADO!</span>
   </div>
 
   <div id="dadosInscrito" class="distDiv" *ngIf='mostrarDados'>
-    <h5 class="header">DADOS DA INSCRIÇÃO</h5>
+    <h5 class="header">CADASTRO DE dadosInscrito</h5>
 
     <form>
       <div class="form-group">
@@ -31,21 +33,64 @@
           [(ngModel)]="inscrito.nascimento" disabled>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [formGroup]="emailForm">
         <label for="apelido">Nome de Jogador</label>
         <input type="text" class="form-control" id="apelido" name="apelido" aria-describedby="apelido"
-          [(ngModel)]="inscrito.apelido" placeholder="Informe seu nome de jogador">
+          formControlName="apelido" [(ngModel)]="inscrito.apelido" placeholder="Informe seu nome de jogador">
+        <span class="cfpErro" *ngIf="g.invalid  &&  g.touched">Nome de jogador necessário</span>
       </div>
 
 
-      <div class="form-group">
+      <div class="form-group" [formGroup]="emailForm">
         <label for="email">Endereço de email</label>
         <input type="email" class="form-control" id="email" name="apelido" aria-describedby="email"
-          [(ngModel)]="inscrito.email" placeholder="Informe seu email">
+          placeholder="Informe seu email" formControlName="email" [(ngModel)]="inscrito.email">
+        <span class="cfpErro" *ngIf="f.invalid  &&  f.touched">Email inválido</span>
       </div>
 
-      <button type="button" class="btn btn-info btn-lg btn-block" (click)="fillTest(inscrito)" id="gerarCodigo">Gerar Código</button>
+      <div class="form-group" [formGroup]="emailForm">
+        <label for="exampleFormControlSelect1">Tipo de Equipe</label>
+        <select class="form-control" id="exampleFormControlSelect1" name="representacao"
+          [(ngModel)]="inscrito.representacao" formControlName="representacao" (change)='onChangeRepresentacao($event)'>
+          <option value=0 selected>Selecione ...</option>
+          <option value=1>BAR</option>
+          <option value=2>CLUBE</option>
+          <option value=3>SEM EQUIPE</option>
+        </select>
+        <span class="cfpErro" *ngIf="i.invalid  &&  i.touched">Selecione uma opção</span>
+      </div>
+
+      <div *ngIf="mostrarCEP">
+        <div class="form-group">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="cep" name="cep" aria-describedby="cep"
+              placeholder="Informe o CEP do local" [(ngModel)]="local.cep" mask="00000-000">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" (click)="filterPlace(local)">Buscar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="locais.length > 0">
+          <label for="nome">Selecione um Bar</label>
+          <select class="form-control" id="nome" name="nome" [(ngModel)]="local.nome">
+            <option *ngFor="let l of locais" [value]="l.nome">{{l.nome}}</option>
+          </select>
+        </div>
+
+        <div class="form-group" *ngIf="mostrarCadastrar">
+          <label for="nomeNovo">Nome do Estabelecimento</label>
+          <input type="text" class="form-control" placeholder="Informe o nome do bar ou clube" name="nomeNovo"
+            [(ngModel)]="local.nome">
+        </div>
+
+      </div>
+
+
+      <button type="button" class="btn btn-info btn-lg btn-block" (click)="fillTest(inscrito)" id="gerarCodigo">Efetuar Cadastro</button>
     </form>
   </div>
+
+
 
 </div>

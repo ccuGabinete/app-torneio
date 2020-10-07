@@ -2,7 +2,7 @@ export class Inscrito {
     cpf: string;
     nome: string;
     nascimento: string;
-    representacao: string;
+    representacao: number;
     apelido: string;
     email: string;
 }
