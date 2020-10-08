@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Inscrito } from '../models/inscrito';
 import { ReponseCEP } from '../models/reponse-cep';
 
 const httpOptions = {

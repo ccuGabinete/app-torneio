@@ -2,9 +2,9 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Equipe } from 'src/app/models/equipe';
-import { Inscrito } from 'src/app/models/inscrito';
-import { Local } from 'src/app/models/local';
+import { Cadastro } from 'src/app/models/cadastro/cadastro';
+import { Equipe } from 'src/app/models/equipe/equipe';
+import { Inscrito } from 'src/app/models/inscrito/inscrito';
 import { CadastroService } from 'src/app/services/cadastro/cadastro.service';
 import { CpfService } from 'src/app/services/cpf.service';
 const f = console.log;
@@ -21,14 +21,9 @@ export class InscritoComponent implements OnInit {
   mostrarCEP = false;
   mostrarCadastrar = false;
   nomeLocal = '';
-  objLocal: Local[] = [
-    { tipo: 1, cep: '21235-280', nome: 'Bar do Chacra' },
-    { tipo: 1, cep: '21235-280', nome: 'Bar do Romeu' },
-    { tipo: 1, cep: '21235-290', nome: 'Bar do Olavo' },
-    { tipo: 2, cep: '21235-290', nome: 'Clube de Bilhar' }
-  ];
+  objLocal: Equipe[] = [];
 
-  locais: Local[] = [];
+  locais: Equipe[] = [];
 
 
   emailForm = new FormGroup({
@@ -47,15 +42,20 @@ export class InscritoComponent implements OnInit {
     private cpfservice: CpfService,
     public inscrito: Inscrito,
     public equipe: Equipe,
-    public local: Local,
+    public local: Equipe,
     public dialog: MatDialog,
-    private cadastroservice: CadastroService
+    private cadastroservice: CadastroService,
+    public cadastro: Cadastro
   ) { }
 
   ngOnInit(): void {
     this.inscrito = new Inscrito();
-    this.local = new Local();
+    this.local = new Equipe();
+    this.cadastro = new Cadastro();
     this.inscrito.representacao = 0;
+    this.cadastroservice.buscarEquipes().subscribe(data => {
+      this.objLocal = data.body;
+    })
   }
 
   openDialog(): void {
@@ -70,7 +70,6 @@ export class InscritoComponent implements OnInit {
   onFindCPF(cpf: string): void {
     this.cpfservice.buscarCEP(cpf).subscribe(data => {
       if (data.body.return === 'OK') {
-        console.log(data.body);
         this.inscrito.nome = data.body.result.nome_da_pf;
         this.inscrito.nascimento = data.body.result.data_nascimento;
         this.mostrarDados = true;
@@ -91,21 +90,40 @@ export class InscritoComponent implements OnInit {
     }
   }
 
-  onSubmit(): void {
-    if (this.mostrarCadastrar) {
-      this.equipe = new Equipe();
-      this.equipe.NomeEquipe = this.local.nome;
-      this.equipe.IDTipoEquipe = this.local.tipo;
-      this.equipe.CEP = this.local.cep;
-
-      this.cadastroservice.salvarEquipe(this.equipe).subscribe(data => {
-        f(data);
-      })
-    }
-
-    this.cadastroservice.salvarCadastro(this.inscrito).subscribe(data => {
-      f(data);
+  onChangeNomeEquipe(): void {
+    this.equipe = new Equipe();
+    this.equipe.NomeEquipe = this.local.NomeEquipe;
+    this.equipe.IDTipoEquipe = this.inscrito.representacao;
+    this.equipe.CEP = this.local.CEP;
+    this.cadastroservice.salvarEquipe(this.equipe).subscribe(data => {
     })
+  }
+
+  onSubmit(): void {
+
+    this.cadastro.CPF = this.inscrito.cpf;
+    this.cadastro.DataNascimento = this.inscrito.nascimento.substring(6) + this.inscrito.nascimento.substring(3, 5) + this.inscrito.nascimento.substring(0, 2);
+    this.cadastro.NickName = this.inscrito.apelido;
+    this.cadastro.Email = this.inscrito.email;
+    this.cadastro.NomeInscrito = this.inscrito.nome;
+
+    this.cadastroservice.buscarEquipes().subscribe(data => {
+
+      let obj = data.body;
+      f(this.local.NomeEquipe.toUpperCase());
+      f(this.local);
+      obj = obj.filter(x => x.NomeEquipe === this.local.NomeEquipe.toUpperCase());
+      let id = obj[0].IDEquipe;
+      this.cadastro.IDEquipe = id;
+
+      this.cadastroservice.salvarCadastro(this.cadastro).subscribe(data => {
+        f(data);
+      }, error => {
+        console.error(error);
+      })
+
+    })
+
   }
 
   fillTest(inscricao: Inscrito): void {
@@ -116,14 +134,15 @@ export class InscritoComponent implements OnInit {
     }
   }
 
-  filterPlace(local: Local): void {
+  filterPlace(local: Equipe): void {
     this.mostrarCadastrar = false;
     this.locais = [];
+    this.local.NomeEquipe = '';
 
     f(local);
 
     this.locais = this.objLocal.filter(
-      x => x.cep.replace('-', '') === local.cep
+      x => x.CEP === local.CEP
     );
 
     if (this.locais.length === 0) {
@@ -133,7 +152,7 @@ export class InscritoComponent implements OnInit {
     f(this.locais);
   }
 
-  
+
 
 }
 

@@ -18,7 +18,7 @@
   </div>
 
   <div id="dadosInscrito" class="distDiv" *ngIf='mostrarDados'>
-    <h5 class="header">CADASTRO DE dadosInscrito</h5>
+    <h5 class="header">CADASTRO</h5>
 
     <form>
       <div class="form-group">
@@ -64,7 +64,7 @@
         <div class="form-group">
           <div class="input-group mb-3">
             <input type="text" class="form-control" id="cep" name="cep" aria-describedby="cep"
-              placeholder="Informe o CEP do local" [(ngModel)]="local.cep" mask="00000-000">
+              placeholder="Informe o CEP do local" [(ngModel)]="local.CEP" mask="00000-000">
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" type="button" (click)="filterPlace(local)">Buscar</button>
             </div>
@@ -73,15 +73,15 @@
 
         <div class="form-group" *ngIf="locais.length > 0">
           <label for="nome">Selecione um Bar</label>
-          <select class="form-control" id="nome" name="nome" [(ngModel)]="local.nome">
-            <option *ngFor="let l of locais" [value]="l.nome">{{l.nome}}</option>
+          <select class="form-control" id="nome" name="nome" [(ngModel)]="local.NomeEquipe">
+            <option *ngFor="let l of locais" [value]="l.NomeEquipe">{{l.NomeEquipe}}</option>
           </select>
         </div>
 
         <div class="form-group" *ngIf="mostrarCadastrar">
           <label for="nomeNovo">Nome do Estabelecimento</label>
           <input type="text" class="form-control" placeholder="Informe o nome do bar ou clube" name="nomeNovo"
-            [(ngModel)]="local.nome">
+            [(ngModel)]="local.NomeEquipe" (change)="onChangeNomeEquipe()">
         </div>
 
       </div>

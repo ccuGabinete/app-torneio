@@ -2,12 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Inscrito } from '../../models/inscrito';
-import { Equipe } from 'src/app/models/equipe';
+import { Inscrito } from '../../models/inscrito/inscrito';
+import { Equipe } from 'src/app/models/equipe/equipe';
+import { Cadastro } from 'src/app/models/cadastro/cadastro';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
+
+const url = 'http://localhost:3000';
+// const url = 'http://200.98.203.35:5000/';
 
 @Injectable({
   providedIn: 'root'
@@ -19,17 +23,17 @@ export class CadastroService {
 
 
   buscarEquipes(): Observable<HttpResponse<any>> {
-    return this.http.get<any>('http://200.98.203.35:5000/listar/equipes', { observe: 'response' })
+    return this.http.get<any>(url + '/listar/equipes', { observe: 'response' })
       .pipe(catchError(this.handleError));
   }
 
   salvarEquipe(equipe: Equipe): Observable<HttpResponse<any>> {
-    return this.http.post<any>('http://200.98.203.35:5000/salvar/equipe', equipe, { observe: 'response' })
+    return this.http.post<any>(url + '/salvar/equipe', equipe, { observe: 'response' })
       .pipe(catchError(this.handleError));
   }
 
-  salvarCadastro(inscrito: Inscrito): Observable<HttpResponse<any>> {
-    return this.http.post<any>('http://200.98.203.35:5000/salvar/inscrito', inscrito, { observe: 'response' })
+  salvarCadastro(cadastro: Cadastro): Observable<HttpResponse<any>> {
+    return this.http.post<any>(url + '/salvar/inscrito', cadastro, { observe: 'response' })
       .pipe(catchError(this.handleError));
   }
 

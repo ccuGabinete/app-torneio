@@ -12,13 +12,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { Inscrito } from './models/inscrito';
+import { Inscrito } from './models/inscrito/inscrito';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { Local } from './models/local';
-import { Equipe } from './models/equipe';
+import { Local } from './models/local/local';
+import { Equipe } from './models/equipe/equipe';
+import { Cadastro } from './models/cadastro/cadastro';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -61,6 +62,7 @@ const keycloakService = new KeycloakService();
     Inscrito,
     Local,
     Equipe,
+    Cadastro,
     {
       provide: KeycloakService,
       useValue: keycloakService,
