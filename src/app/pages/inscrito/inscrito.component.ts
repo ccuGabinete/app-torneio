@@ -74,6 +74,7 @@ export class InscritoComponent implements OnInit {
     this.mostrarDados = false;
     this.mostrarErro = false;
     this.mostrarAvisoCPF = false;
+    this.inscrito.cpf = null;
   }
 
   onFindCPF(cpf: string): void {
