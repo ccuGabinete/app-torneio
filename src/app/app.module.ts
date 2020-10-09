@@ -3,9 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './pages/home/home.component';
-import { ClubeComponent } from './pages/clube/clube.component';
-import { BarComponent } from './pages/bar/bar.component';
 import { InscritoComponent } from './pages/inscrito/inscrito.component';
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Local } from './models/local/local';
 import { Equipe } from './models/equipe/equipe';
 import { Cadastro } from './models/cadastro/cadastro';
+import { Cep } from './models/cep/cep';
+import { SucessoComponent } from './pages/sucesso/sucesso/sucesso.component';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -33,10 +32,8 @@ const keycloakService = new KeycloakService();
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    ClubeComponent,
-    BarComponent,
-    InscritoComponent
+    InscritoComponent,
+    SucessoComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +60,7 @@ const keycloakService = new KeycloakService();
     Local,
     Equipe,
     Cadastro,
+    Cep,
     {
       provide: KeycloakService,
       useValue: keycloakService,

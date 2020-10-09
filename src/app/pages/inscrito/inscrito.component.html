@@ -1,10 +1,11 @@
-<div class="container">
+<div class="container" style="margin-bottom: 4rem;">
   <div id="cpfInscrito">
     <form>
       <div class="form-group" [formGroup]="emailForm">
         <label for="cpf">CPF</label>
         <input type="text" class="form-control" id="cpf" aria-describedby="cpf" placeholder="Infomre um CPF válido"
-          mask="000.000.000-00" [(ngModel)]="inscrito.cpf" name="cpf" (focus)='onFocusCPF()' (change)="onCPF()" formControlName="cpf">
+          mask="000.000.000-00" [(ngModel)]="inscrito.cpf" name="cpf" (focus)='onFocusCPF()' (change)="onCPF()"
+          formControlName="cpf">
         <span class="cfpErro" *ngIf="h.invalid  &&  h.touched">Informe um número de CPF</span>
       </div>
       <button type="button" class="btn btn-info btn-lg btn-block" (click)="onFindCPF(inscrito.cpf)" id="findCPF">
@@ -39,11 +40,58 @@
         </div>
 
         <div class="form-group" [formGroup]="emailForm">
-          <label for="apelido">CEP</label>
-          <input type="text" class="form-control" id="cep" name="cep" aria-describedby="cep" formControlName="cep"
-            [(ngModel)]="inscrito.cep" placeholder="Informe o CEP de onde você mora" mask="00000-000">
-          <span class="cfpErro" *ngIf="j.invalid  &&  g.touched">CEP necessário</span>
+          <div>
+            <label for="exampleFormControlSelect1">Email</label>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="email" name="apelido" aria-describedby="email"
+              placeholder="Email de envio para o  código de confirmação" formControlName="email"
+              [(ngModel)]="inscrito.email">
+            <div class="input-group-append">
+              <button class="btn btn-info botao" type="button" (click)="onSendEmail()">enviar</button>
+            </div>
+          </div>
+          <span class="cfpErro" *ngIf="f.invalid  &&  f.touched">Informe um email válido</span>
         </div>
+
+
+        <div class="form-group" [formGroup]="emailForm">
+          <div>
+            <label for="exampleFormControlSelect1">Código de confirmação</label>
+          </div>
+
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="codigo" name="codigo" aria-describedby="codigo"
+              placeholder="Informe o código" formControlName="codigo" [(ngModel)]="inscrito.codigo">
+            <div class="input-group-append">
+              <button class="btn btn-info botao" type="button" (click)="confirmCodigo()">confirmar</button>
+            </div>
+          </div>
+          <span class="cfpErro" *ngIf="k.invalid  &&  k.touched">Código de confirmação necessário</span>
+        </div>
+
+          <div class="form-group">
+          <div>
+            <label for="apelido">CEP</label>
+          </div>
+          <div class="input-group mb-3" [formGroup]="emailForm">
+            <input type="text" class="form-control" id="cep" name="cep" aria-describedby="cep" formControlName="cep"
+            [(ngModel)]="inscrito.cep" placeholder="Informe o CEP de onde você mora" (focus)="onFocusCEP()" mask="00000-000">
+            <div class="input-group-append">
+              <button class="btn btn-info botao" type="button" (click)="getCEP()">buscar</button>
+            </div>
+          </div>
+          <span class="cfpErro" *ngIf="j.invalid  &&  j.touched">CEP necessário</span>
+        </div>
+
+        <div class="form-group"  [formGroup]="emailForm">
+          <label for="bairro">Bairro</label>
+          <input type="text" class="form-control" id="bairro" name="bairro" aria-describedby="bairro"
+            [(ngModel)]="inscrito.bairro" formControlName="bairro" placeholder="É necessário informar um CEP válido para posseguir com o cadastro" disabled>
+            <span class="cfpErro" *ngIf="l.invalid  &&  l.touched">Bairro necessário</span>
+        </div>
+        
 
         <div class="form-group" [formGroup]="emailForm">
           <label for="apelido">Nome de Jogador</label>
@@ -52,13 +100,6 @@
           <span class="cfpErro" *ngIf="g.invalid  &&  g.touched">Nome de jogador necessário</span>
         </div>
 
-
-        <div class="form-group" [formGroup]="emailForm">
-          <label for="email">Endereço de email</label>
-          <input type="email" class="form-control" id="email" name="apelido" aria-describedby="email"
-            placeholder="Informe seu email" formControlName="email" [(ngModel)]="inscrito.email">
-          <span class="cfpErro" *ngIf="f.invalid  &&  f.touched">Email inválido</span>
-        </div>
 
         <div class="form-group" [formGroup]="emailForm">
           <label for="exampleFormControlSelect1">Tipo de Equipe</label>
@@ -79,7 +120,7 @@
               <input type="text" class="form-control" id="cep" name="cep" aria-describedby="cep"
                 placeholder="Informe o CEP do local" [(ngModel)]="local.CEP" mask="00000-000">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" (click)="filterPlace(local)">Buscar</button>
+                <button class="btn btn-info botao" type="button" (click)="filterPlace(local)">buscar</button>
               </div>
             </div>
           </div>
@@ -99,10 +140,15 @@
 
         </div>
 
-
         <button type="button" class="btn btn-info btn-lg btn-block" (click)="fillTest(inscrito)"
           id="gerarCodigo">Efetuar Cadastro</button>
       </form>
     </div>
+  </div>
+
+  <div class="form-group" *ngIf="">
+    <label for="nomeNovo">Código de Envio</label>
+    <input type="text" class="form-control" placeholder="Informe o código de envio" name="nomeNovo"
+      [(ngModel)]="local.NomeEquipe" (change)="onChangeNomeEquipe()">
   </div>
 </div>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { ReponseCEP } from '../models/reponse-cep';
+import { ReponseCEP } from '../../models/reponse-cep';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,7 +16,7 @@ export class CpfService {
   constructor(private http: HttpClient) { }
 
 
-  buscarCEP(cpf: string): Observable<HttpResponse<ReponseCEP>> {
+  buscarCPF(cpf: string): Observable<HttpResponse<ReponseCEP>> {
     return this.http.get<ReponseCEP>('https://ws.hubdodesenvolvedor.com.br/v2/cpf/?cpf=' + cpf + '&token=98859550pQumvAYyBL178487920',  { observe: 'response' })
       .pipe(catchError(this.handleError));
   }

@@ -21,6 +21,11 @@ export class CadastroService {
 
   constructor(private http: HttpClient) { }
 
+  enviarEmail(destino: string, msg: string): Observable<HttpResponse<any>> {
+    return this.http.post<any>(url + '/email/send', {destino: destino, msg: msg}, { observe: 'response' })
+      .pipe(catchError(this.handleError));
+  }
+
   buscarCPF(cpf: string): Observable<HttpResponse<any>> {
     return this.http.post<any>(url + '/buscar/CPF', {CPF: cpf}, { observe: 'response' })
       .pipe(catchError(this.handleError));

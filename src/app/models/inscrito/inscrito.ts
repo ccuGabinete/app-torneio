@@ -6,4 +6,6 @@ export class Inscrito {
     apelido: string;
     email: string;
     cep: string;
+    codigo: string;
+    bairro: string;
 }

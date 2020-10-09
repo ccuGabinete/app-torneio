@@ -16,12 +16,13 @@ export class AppComponent implements OnInit {
   }
 
   logout(){
+    window.open("http://ligadoscampeoesdasinuca.epizy.com/", "_blank");
     this.keycloakService.logout();
   }
 
   async ngOnInit(): Promise<void> {
     let user = await this.keycloakService.loadUserProfile();
-    this.usuario = 'Bem vindo, ' + user.firstName + ' ' + user.lastName;
+    this.usuario = user.firstName + ' ' + user.lastName;
     if(this.keycloakService.isTokenExpired()) {
       this.logout();
     }

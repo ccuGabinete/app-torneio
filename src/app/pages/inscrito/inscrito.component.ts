@@ -6,9 +6,12 @@ import { Cadastro } from 'src/app/models/cadastro/cadastro';
 import { Equipe } from 'src/app/models/equipe/equipe';
 import { Inscrito } from 'src/app/models/inscrito/inscrito';
 import { CadastroService } from 'src/app/services/cadastro/cadastro.service';
-import { CpfService } from 'src/app/services/cpf.service';
+import { CpfService } from 'src/app/services/cpf/cpf.service';
 import { cpf } from 'cpf-cnpj-validator';
-const f = console.log;
+import { CepService } from 'src/app/services/cep/cep.service';
+import { Router } from '@angular/router';
+
+const p = console.log;
 
 @Component({
   selector: 'app-inscrito',
@@ -24,7 +27,6 @@ export class InscritoComponent implements OnInit {
   mostrarAvisoCPF = false;
   nomeLocal = '';
   objLocal: Equipe[] = [];
-
   locais: Equipe[] = [];
 
 
@@ -33,7 +35,9 @@ export class InscritoComponent implements OnInit {
     apelido: new FormControl('', Validators.required),
     cpf: new FormControl('', Validators.required),
     cep: new FormControl('', Validators.required),
-    representacao: new FormControl('', [Validators.required, Validators.pattern('[1-9]')])
+    representacao: new FormControl('', [Validators.required, Validators.pattern('[1-9]')]),
+    codigo: new FormControl('', Validators.required),
+    bairro: new FormControl('', Validators.required),
   });
 
   get f(): any { return this.emailForm.get('email'); }
@@ -41,6 +45,8 @@ export class InscritoComponent implements OnInit {
   get h(): any { return this.emailForm.get('cpf'); }
   get i(): any { return this.emailForm.get('representacao'); }
   get j(): any { return this.emailForm.get('cep'); }
+  get k(): any { return this.emailForm.get('codigo'); }
+  get l(): any { return this.emailForm.get('bairro'); }
 
   constructor(
     private cpfservice: CpfService,
@@ -49,7 +55,9 @@ export class InscritoComponent implements OnInit {
     public local: Equipe,
     public dialog: MatDialog,
     private cadastroservice: CadastroService,
-    public cadastro: Cadastro
+    public cadastro: Cadastro,
+    private cepservice: CepService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -60,6 +68,43 @@ export class InscritoComponent implements OnInit {
     this.cadastroservice.buscarEquipes().subscribe(data => {
       this.objLocal = data.body;
     })
+  }
+
+  onFocusCEP(): void{
+    this.inscrito.bairro = null;
+    this.inscrito.cep = null;
+  }
+
+  getCEP(): void {
+    if (this.emailForm.get('cep').valid) {
+      this.cepservice.buscarCEP(this.inscrito.cep).subscribe(data => {
+        this.inscrito.bairro = data.body.bairro + ' - ' +  data.body.localidade ;
+      })
+    }
+  }
+
+
+  getCodigo(): string {
+    let tam = this.inscrito.email.toString().length + 65252000;
+    return tam.toString(16);
+  }
+
+
+  confirmCodigo(): void {
+    if (this.inscrito.codigo !== this.getCodigo()) {
+      this.dialog.open(DialogCodigoComponent);
+    } else {
+      this.dialog.open(DialogConfirmaComponent);
+    }
+  }
+
+  onSendEmail(): void {
+    if (this.emailForm.get('email').valid) {
+      this.cadastroservice.enviarEmail(this.inscrito.email, 'Código: ' + this.getCodigo()).subscribe(data => {
+        p(data);
+        this.dialog.open(DialogMSGComponent);
+      })
+    }
   }
 
   onCPF(): Boolean {
@@ -82,8 +127,8 @@ export class InscritoComponent implements OnInit {
 
     if (this.onCPF()) {
       this.cadastroservice.buscarCPF(this.inscrito.cpf).subscribe(data => {
-        if(data.body[0].Total === 0){
-          this.cpfservice.buscarCEP(cpf).subscribe(data => {
+        if (data.body[0].Total === 0) {
+          this.cpfservice.buscarCPF(cpf).subscribe(data => {
             if (data.body.return === 'OK') {
               this.inscrito.nome = data.body.result.nome_da_pf;
               this.inscrito.nascimento = data.body.result.data_nascimento;
@@ -104,9 +149,9 @@ export class InscritoComponent implements OnInit {
 
 
 
-    if(this.onCPF()){
-      
-    }else {
+    if (this.onCPF()) {
+
+    } else {
       this.mostrarAvisoCPF = true;
     }
 
@@ -142,14 +187,12 @@ export class InscritoComponent implements OnInit {
     this.cadastroservice.buscarEquipes().subscribe(data => {
 
       let obj = data.body;
-      f(this.local.NomeEquipe.toUpperCase());
-      f(this.local);
       obj = obj.filter(x => x.NomeEquipe === this.local.NomeEquipe.toUpperCase());
       let id = obj[0].IDEquipe;
       this.cadastro.IDEquipe = id;
 
       this.cadastroservice.salvarCadastro(this.cadastro).subscribe(data => {
-        f(data);
+        this.router.navigate(['/sucesso']);
       }, error => {
         console.error(error);
       })
@@ -159,19 +202,23 @@ export class InscritoComponent implements OnInit {
   }
 
   fillTest(inscricao: Inscrito): void {
-    if (this.emailForm.status === 'INVALID') {
-      this.openDialog();
+
+    if (this.inscrito.codigo !== this.getCodigo()) {
+      this.dialog.open(DialogCodigoComponent);
     } else {
-      this.onSubmit();
+      if (this.emailForm.status === 'INVALID') {
+        this.openDialog();
+      } else {
+        this.onSubmit();
+      }
     }
+
   }
 
   filterPlace(local: Equipe): void {
     this.mostrarCadastrar = false;
     this.locais = [];
     this.local.NomeEquipe = '';
-
-    f(local);
 
     this.locais = this.objLocal.filter(
       x => x.CEP === local.CEP
@@ -180,11 +227,7 @@ export class InscritoComponent implements OnInit {
     if (this.locais.length === 0) {
       this.mostrarCadastrar = true;
     }
-
-    f(this.locais);
   }
-
-
 
 }
 
@@ -203,3 +246,25 @@ export class DialogElementsComponent { }
 })
 
 export class DialogCPFComponent { }
+
+@Component({
+  selector: 'app-msg',
+  templateUrl: 'msg.html',
+})
+
+export class DialogMSGComponent { }
+
+@Component({
+  selector: 'app-codigo',
+  templateUrl: 'codigo.html',
+})
+
+export class DialogCodigoComponent { }
+
+@Component({
+  selector: 'app-confirma',
+  templateUrl: 'confirmacao.html',
+})
+
+export class DialogConfirmaComponent { }
+
