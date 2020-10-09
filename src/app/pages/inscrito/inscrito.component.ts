@@ -70,7 +70,7 @@ export class InscritoComponent implements OnInit {
     })
   }
 
-  onFocusCEP(): void{
+  onFocusCEP(): void {
     this.inscrito.bairro = null;
     this.inscrito.cep = null;
   }
@@ -78,7 +78,7 @@ export class InscritoComponent implements OnInit {
   getCEP(): void {
     if (this.emailForm.get('cep').valid) {
       this.cepservice.buscarCEP(this.inscrito.cep).subscribe(data => {
-        this.inscrito.bairro = data.body.bairro + ' - ' +  data.body.localidade ;
+        this.inscrito.bairro = data.body.bairro + ' - ' + data.body.localidade;
       })
     }
   }
@@ -186,10 +186,16 @@ export class InscritoComponent implements OnInit {
 
     this.cadastroservice.buscarEquipes().subscribe(data => {
 
-      let obj = data.body;
-      obj = obj.filter(x => x.NomeEquipe === this.local.NomeEquipe.toUpperCase());
-      let id = obj[0].IDEquipe;
-      this.cadastro.IDEquipe = id;
+
+      if (this.local.NomeEquipe) {
+        let obj = data.body;
+        obj = obj.filter(x => x.NomeEquipe === this.local.NomeEquipe.toUpperCase());
+        let id = obj[0].IDEquipe;
+        this.cadastro.IDEquipe = id;
+      } else {
+        this.cadastro.IDEquipe = "28";
+      }
+
 
       this.cadastroservice.salvarCadastro(this.cadastro).subscribe(data => {
         this.router.navigate(['/sucesso']);

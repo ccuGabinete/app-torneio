@@ -20,6 +20,7 @@ import { Cadastro } from './models/cadastro/cadastro';
 import { Cep } from './models/cep/cep';
 import { SucessoComponent } from './pages/sucesso/sucesso/sucesso.component';
 
+
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 export function HttpLoaderFactory(http: HttpClient) {

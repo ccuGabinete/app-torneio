@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { Router } from '@angular/router';
 const f = console.log;
 
 @Component({
@@ -11,11 +12,13 @@ export class AppComponent implements OnInit {
   title = 'app-torneio';
   usuario = '';
 
-  constructor(public keycloakService: KeycloakService) {
-
-  }
+  constructor(
+    public keycloakService: KeycloakService,
+    private router: Router
+    ) {}
 
   logout(){
+    this.router.navigate(['/']);
     window.open("http://ligadoscampeoesdasinuca.epizy.com/", "_blank");
     this.keycloakService.logout();
   }
