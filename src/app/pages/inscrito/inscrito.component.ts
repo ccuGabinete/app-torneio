@@ -7,6 +7,7 @@ import { Equipe } from 'src/app/models/equipe/equipe';
 import { Inscrito } from 'src/app/models/inscrito/inscrito';
 import { CadastroService } from 'src/app/services/cadastro/cadastro.service';
 import { CpfService } from 'src/app/services/cpf.service';
+import { cpf } from 'cpf-cnpj-validator';
 const f = console.log;
 
 @Component({
@@ -20,6 +21,7 @@ export class InscritoComponent implements OnInit {
   mostrarErro = false;
   mostrarCEP = false;
   mostrarCadastrar = false;
+  mostrarAvisoCPF = false;
   nomeLocal = '';
   objLocal: Equipe[] = [];
 
@@ -30,6 +32,7 @@ export class InscritoComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     apelido: new FormControl('', Validators.required),
     cpf: new FormControl('', Validators.required),
+    cep: new FormControl('', Validators.required),
     representacao: new FormControl('', [Validators.required, Validators.pattern('[1-9]')])
   });
 
@@ -37,6 +40,7 @@ export class InscritoComponent implements OnInit {
   get g(): any { return this.emailForm.get('apelido'); }
   get h(): any { return this.emailForm.get('cpf'); }
   get i(): any { return this.emailForm.get('representacao'); }
+  get j(): any { return this.emailForm.get('cep'); }
 
   constructor(
     private cpfservice: CpfService,
@@ -58,6 +62,10 @@ export class InscritoComponent implements OnInit {
     })
   }
 
+  onCPF(): Boolean {
+    return cpf.isValid(this.inscrito.cpf);
+  }
+
   openDialog(): void {
     this.dialog.open(DialogElementsComponent);
   }
@@ -65,21 +73,43 @@ export class InscritoComponent implements OnInit {
   onFocusCPF(): void {
     this.mostrarDados = false;
     this.mostrarErro = false;
+    this.mostrarAvisoCPF = false;
   }
 
   onFindCPF(cpf: string): void {
-    this.cpfservice.buscarCEP(cpf).subscribe(data => {
-      if (data.body.return === 'OK') {
-        this.inscrito.nome = data.body.result.nome_da_pf;
-        this.inscrito.nascimento = data.body.result.data_nascimento;
-        this.mostrarDados = true;
-        this.mostrarErro = false;
-      } else {
-        this.mostrarDados = false;
-        this.mostrarErro = true;
-      }
+    this.mostrarAvisoCPF = false;
 
-    });
+    if (this.onCPF()) {
+      this.cadastroservice.buscarCPF(this.inscrito.cpf).subscribe(data => {
+        if(data.body[0].Total === 0){
+          this.cpfservice.buscarCEP(cpf).subscribe(data => {
+            if (data.body.return === 'OK') {
+              this.inscrito.nome = data.body.result.nome_da_pf;
+              this.inscrito.nascimento = data.body.result.data_nascimento;
+              this.mostrarDados = true;
+              this.mostrarErro = false;
+            } else {
+              this.mostrarDados = false;
+              this.mostrarErro = true;
+            }
+          });
+        } else {
+          this.dialog.open(DialogCPFComponent);
+        }
+      })
+    } else {
+      this.mostrarAvisoCPF = true;
+    }
+
+
+
+    if(this.onCPF()){
+      
+    }else {
+      this.mostrarAvisoCPF = true;
+    }
+
+
 
   }
 
@@ -106,6 +136,7 @@ export class InscritoComponent implements OnInit {
     this.cadastro.NickName = this.inscrito.apelido;
     this.cadastro.Email = this.inscrito.email;
     this.cadastro.NomeInscrito = this.inscrito.nome;
+    this.cadastro.CEP = this.inscrito.cep;
 
     this.cadastroservice.buscarEquipes().subscribe(data => {
 
@@ -162,5 +193,12 @@ export class InscritoComponent implements OnInit {
   templateUrl: 'dialog.html',
 })
 
-
 export class DialogElementsComponent { }
+
+
+@Component({
+  selector: 'app-cpf',
+  templateUrl: 'cpf.html',
+})
+
+export class DialogCPFComponent { }

@@ -5,4 +5,5 @@ export class Inscrito {
     representacao: number;
     apelido: string;
     email: string;
+    cep: string;
 }

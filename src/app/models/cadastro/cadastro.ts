@@ -5,4 +5,5 @@ export class Cadastro {
     Email: string;
     IDEquipe: string;
     CPF: string;
+    CEP: string;
 }

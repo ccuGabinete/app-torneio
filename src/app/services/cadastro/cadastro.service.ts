@@ -21,6 +21,10 @@ export class CadastroService {
 
   constructor(private http: HttpClient) { }
 
+  buscarCPF(cpf: string): Observable<HttpResponse<any>> {
+    return this.http.post<any>(url + '/buscar/CPF', {CPF: cpf}, { observe: 'response' })
+      .pipe(catchError(this.handleError));
+  }
 
   buscarEquipes(): Observable<HttpResponse<any>> {
     return this.http.get<any>(url + '/listar/equipes', { observe: 'response' })
