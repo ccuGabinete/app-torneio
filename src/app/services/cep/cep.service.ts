@@ -5,7 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { Cep } from 'src/app/models/cep/cep';
 
 // const url = 'http://localhost:3000';
-const url = 'http://200.98.203.35:5000'
+const url = 'https://api-torneio.herokuapp.com'
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })

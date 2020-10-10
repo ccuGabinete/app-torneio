@@ -11,7 +11,7 @@ const httpOptions = {
 };
 
 // const url = 'http://localhost:3000';
-const url = 'http://200.98.203.35:5000';
+const url = 'https://api-torneio.herokuapp.com';
 
 @Injectable({
   providedIn: 'root'
