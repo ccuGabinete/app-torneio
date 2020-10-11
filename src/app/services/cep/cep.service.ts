@@ -4,8 +4,8 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Cep } from 'src/app/models/cep/cep';
 
-const url = 'http://localhost:5000';
-// const url = 'https://api-torneio.herokuapp.com'
+// const url = 'http://localhost:5000';
+const url = 'https://api-torneio.herokuapp.com';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
