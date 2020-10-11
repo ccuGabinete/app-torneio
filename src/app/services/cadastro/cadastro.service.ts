@@ -31,6 +31,12 @@ export class CadastroService {
       .pipe(catchError(this.handleError));
   }
 
+  buscarEmail(email: string): Observable<HttpResponse<any>> {
+    return this.http.post<any>(url + '/buscar/email', {email: email}, { observe: 'response' })
+      .pipe(catchError(this.handleError));
+  }
+
+
   buscarEquipes(): Observable<HttpResponse<any>> {
     return this.http.get<any>(url + '/listar/equipes', { observe: 'response' })
       .pipe(catchError(this.handleError));

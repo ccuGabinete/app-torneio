@@ -20,6 +20,7 @@ import { Cadastro } from './models/cadastro/cadastro';
 import { Cep } from './models/cep/cep';
 import { SucessoComponent } from './pages/sucesso/sucesso/sucesso.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Usuario } from './models/usuario/usuario';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -64,6 +65,7 @@ const keycloakService = new KeycloakService();
     Equipe,
     Cadastro,
     Cep,
+    Usuario,
     {
       provide: KeycloakService,
       useValue: keycloakService,

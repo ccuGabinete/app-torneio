@@ -11,6 +11,8 @@ import { cpf } from 'cpf-cnpj-validator';
 import { CepService } from 'src/app/services/cep/cep.service';
 import { Router } from '@angular/router';
 import { TooltipPosition } from '@angular/material/tooltip';
+import { LogadoService } from 'src/app/services/logado/logado.service';
+import { Usuario } from 'src/app/models/usuario/usuario';
 
 const p = console.log;
 
@@ -30,6 +32,8 @@ export class InscritoComponent implements OnInit {
   objLocal: Equipe[] = [];
   locais: Equipe[] = [];
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  disabled = false;
+  mostrarOpcoes = false;
 
 
   emailForm = new FormGroup({
@@ -55,7 +59,9 @@ export class InscritoComponent implements OnInit {
     private cadastroservice: CadastroService,
     public cadastro: Cadastro,
     private cepservice: CepService,
-    private router: Router
+    private router: Router,
+    private logadoservice: LogadoService,
+    public usuario: Usuario
   ) { }
 
   ngOnInit(): void {
@@ -66,6 +72,22 @@ export class InscritoComponent implements OnInit {
     this.cadastroservice.buscarEquipes().subscribe(data => {
       this.objLocal = data.body;
     })
+
+    this.usuario = new Usuario();
+
+    this.logadoservice.currentMessage.subscribe(user => {
+      this.usuario = user;
+    })
+
+  }
+
+  shosEquipe(bool: boolean): void {
+    this.mostrarOpcoes = bool;
+    if (bool) {
+      this.mostrarCadastrar = false;
+    } else {
+      this.mostrarCadastrar = true;
+    }
   }
 
   onFocusCEP(): void {
@@ -162,12 +184,19 @@ export class InscritoComponent implements OnInit {
     })
   }
 
+  onChangeLocal(): void {
+    this.disabled = true;
+    window.alert('teu cu');
+  }
+
   onSubmit(): void {
 
     this.cadastro.CPF = this.inscrito.cpf;
     this.cadastro.NickName = this.inscrito.apelido;
     this.cadastro.NomeInscrito = this.inscrito.nome;
     this.cadastro.CEP = this.inscrito.cep;
+    this.cadastro.NomeInscrito = this.usuario.firstName + ' ' + this.usuario.lastName;
+    this.cadastro.Email = this.usuario.email;
 
     this.cadastroservice.buscarEquipes().subscribe(data => {
 

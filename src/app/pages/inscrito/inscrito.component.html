@@ -98,24 +98,34 @@
             </div>
           </div>
 
+
           <div *ngIf="locais.length > 0">
-            <label for="nome">Selecione um Bar</label>
-          </div>
 
-          <div class="input-group" *ngIf="locais.length > 0">
+           
 
+            <ul>
+              <li *ngFor="let l of locais" [value]="l.NomeEquipe">{{l.NomeEquipe}}</li>
+            </ul>
 
-            <select class="custom-select" id="nome" name="nome" [(ngModel)]="local.NomeEquipe">
-              <option *ngFor="let l of locais" [value]="l.NomeEquipe">{{l.NomeEquipe}}</option>
-            </select>
-            <div class="input-group-append">
-              <button class="btn btn-info botao" type="button" (click)="fillPlace()">Cadastrar</button>
+            <div class="row" style="margin-top: 2em; margin-bottom: 2em;">
+              <div class="col-sm">
+                <button type="button" class="btn btn-link btn-lg btn-block" style="font-size: 1em;" (click)="shosEquipe(true)">escolher um dessas equipes</button>
+              </div>
+              <div class="col-sm">
+                <button type="button" class="btn btn-link btn-lg btn-block" style="font-size: 1em;" (click)="shosEquipe(false)">cadastrar uma nova equipe</button>
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="mostrarOpcoes">
+              <label for="equipenome">Selecione um Local</label>
+              <select class="form-control" id="equipenome" name="equipenome" [(ngModel)]="local.NomeEquipe">
+                <option *ngFor="let l of locais" [value]="l.NomeEquipe">{{l.NomeEquipe}}</option>
+              </select>
             </div>
           </div>
 
 
-
-          <div class="form-group" *ngIf="mostrarCadastrar">
+          <div class="form-group" *ngIf="mostrarCadastrar && !mostrarOpcoes">
             <label for="nomeNovo">Nome do Estabelecimento</label>
             <input type="text" class="form-control" placeholder="Informe o nome do bar ou clube" name="nomeNovo"
               [(ngModel)]="local.NomeEquipe" (change)="onChangeNomeEquipe()">
