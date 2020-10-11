@@ -56,8 +56,7 @@
         <div class="form-group" [formGroup]="emailForm">
           <label for="bairro">Bairro</label>
           <input type="text" class="form-control" id="bairro" name="bairro" aria-describedby="bairro"
-            [(ngModel)]="inscrito.bairro" formControlName="bairro"
-            placeholder="É necessário informar um CEP válido para posseguir com o cadastro" disabled>
+            [(ngModel)]="inscrito.bairro" formControlName="bairro" disabled>
           <span class="cfpErro" *ngIf="l.invalid  &&  l.touched">Bairro necessário</span>
         </div>
 
@@ -78,7 +77,6 @@
             <option value=0 selected>Selecione ...</option>
             <option value=1>BAR</option>
             <option value=2>CLUBE</option>
-            <option value=3>SEM EQUIPE</option>
           </select>
           <span class="cfpErro" *ngIf="i.invalid  &&  i.touched">Selecione uma opção</span>
         </div>
@@ -88,14 +86,15 @@
         </div>
 
         <div *ngIf="mostrarCEP">
-          <div class="form-group">
+          <div class="form-group" [formGroup]="emailForm">
             <div class="input-group mb-3">
               <input type="text" class="form-control" id="cep" name="cep" aria-describedby="cep"
-                placeholder="Informe o CEP do local" [(ngModel)]="local.CEP" mask="00000-000" (focus)="onFocuPlace()">
+                placeholder="Informe o CEP do local" [(ngModel)]="local.CEP" mask="00000-000" (focus)="onFocuPlace()" formControlName="cepequipe">
               <div class="input-group-append">
                 <button class="btn btn-info botao" type="button" (click)="filterPlace(local)">buscar</button>
               </div>
             </div>
+            <span class="cfpErro" *ngIf="k.invalid  &&  k.touched">CEP necessário</span>
           </div>
 
 

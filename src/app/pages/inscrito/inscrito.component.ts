@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { LogadoService } from 'src/app/services/logado/logado.service';
 import { Usuario } from 'src/app/models/usuario/usuario';
+import { EquipeService } from 'src/app/services/equipe/equipe.service';
 
 const p = console.log;
 
@@ -42,12 +43,14 @@ export class InscritoComponent implements OnInit {
     cep: new FormControl('', Validators.required),
     representacao: new FormControl('', [Validators.required, Validators.pattern('[1-9]')]),
     bairro: new FormControl('', Validators.required),
+    cepequipe: new FormControl('', Validators.required),
   });
 
   get g(): any { return this.emailForm.get('apelido'); }
   get h(): any { return this.emailForm.get('cpf'); }
   get i(): any { return this.emailForm.get('representacao'); }
   get j(): any { return this.emailForm.get('cep'); }
+  get k(): any { return this.emailForm.get('cepequipe'); }
   get l(): any { return this.emailForm.get('bairro'); }
 
   constructor(
@@ -61,7 +64,8 @@ export class InscritoComponent implements OnInit {
     private cepservice: CepService,
     private router: Router,
     private logadoservice: LogadoService,
-    public usuario: Usuario
+    public usuario: Usuario,
+    private equipeservice: EquipeService
   ) { }
 
   ngOnInit(): void {
@@ -177,48 +181,35 @@ export class InscritoComponent implements OnInit {
 
   onChangeNomeEquipe(): void {
     this.equipe = new Equipe();
-    this.equipe.NomeEquipe = this.local.NomeEquipe;
+    this.equipe.NomeEquipe = this.local.NomeEquipe.toUpperCase();
     this.equipe.IDTipoEquipe = this.inscrito.representacao;
     this.equipe.CEP = this.local.CEP;
     this.cadastroservice.salvarEquipe(this.equipe).subscribe(data => {
+      this.equipeservice.mudarIDEquipe(data.body.toString());
     })
   }
 
   onChangeLocal(): void {
     this.disabled = true;
-    window.alert('teu cu');
   }
 
   onSubmit(): void {
+    this.equipeservice.currentMessage.subscribe(data => {
+      if (data.toString().length > 0) {
+        this.cadastro.IDEquipe = data.toString();
+        this.cadastro.CPF = this.inscrito.cpf;
+        this.cadastro.NickName = this.inscrito.apelido;
+        this.cadastro.NomeInscrito = this.usuario.firstName + ' ' + this.usuario.lastName;
+        this.cadastro.CEP = this.inscrito.cep;
+        this.cadastro.Email = this.usuario.email;
 
-    this.cadastro.CPF = this.inscrito.cpf;
-    this.cadastro.NickName = this.inscrito.apelido;
-    this.cadastro.NomeInscrito = this.inscrito.nome;
-    this.cadastro.CEP = this.inscrito.cep;
-    this.cadastro.NomeInscrito = this.usuario.firstName + ' ' + this.usuario.lastName;
-    this.cadastro.Email = this.usuario.email;
-
-    this.cadastroservice.buscarEquipes().subscribe(data => {
-
-
-      if (this.local.NomeEquipe) {
-        let obj = data.body;
-        obj = obj.filter(x => x.NomeEquipe === this.local.NomeEquipe.toUpperCase());
-        let id = obj[0].IDEquipe;
-        this.cadastro.IDEquipe = id;
-      } else {
-        this.cadastro.IDEquipe = "28";
+        this.cadastroservice.salvarCadastro(this.cadastro).subscribe(data => {
+          this.router.navigate(['/']);
+        }, error => {
+          console.error(error);
+        })
       }
-
-
-      this.cadastroservice.salvarCadastro(this.cadastro).subscribe(data => {
-        this.router.navigate(['/home']);
-      }, error => {
-        console.error(error);
-      })
-
-    })
-
+    });
   }
 
   fillTest(inscricao: Inscrito): void {
@@ -228,6 +219,7 @@ export class InscritoComponent implements OnInit {
     } else {
       this.onSubmit();
     }
+
 
   }
 

@@ -7,7 +7,10 @@ import { Equipe } from 'src/app/models/equipe/equipe';
 import { Cadastro } from 'src/app/models/cadastro/cadastro';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Date': (new Date()).toUTCString()
+  })
 };
 
 const url = 'http://localhost:5000';
@@ -22,17 +25,17 @@ export class CadastroService {
   constructor(private http: HttpClient) { }
 
   enviarEmail(destino: string, msg: string): Observable<HttpResponse<any>> {
-    return this.http.post<any>(url + '/email/send', {destino: destino, msg: msg}, { observe: 'response' })
+    return this.http.post<any>(url + '/email/send', { destino: destino, msg: msg }, { observe: 'response' })
       .pipe(catchError(this.handleError));
   }
 
   buscarCPF(cpf: string): Observable<HttpResponse<any>> {
-    return this.http.post<any>(url + '/buscar/CPF', {CPF: cpf}, { observe: 'response' })
+    return this.http.post<any>(url + '/buscar/CPF', { CPF: cpf }, { observe: 'response' })
       .pipe(catchError(this.handleError));
   }
 
   buscarEmail(email: string): Observable<HttpResponse<any>> {
-    return this.http.post<any>(url + '/buscar/email', {email: email}, { observe: 'response' })
+    return this.http.post<any>(url + '/buscar/email', { email: email }, { observe: 'response' })
       .pipe(catchError(this.handleError));
   }
 
@@ -47,7 +50,7 @@ export class CadastroService {
       .pipe(catchError(this.handleError));
   }
 
-  salvarCadastro(cadastro: Cadastro): Observable<HttpResponse<any>> {
+  salvarCadastro(cadastro: Cadastro): Observable<HttpResponse<String>> {
     return this.http.post<any>(url + '/salvar/inscrito', cadastro, { observe: 'response' })
       .pipe(catchError(this.handleError));
   }

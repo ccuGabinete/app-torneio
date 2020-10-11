@@ -8,4 +8,5 @@ export class Inscrito {
     cep: string;
     codigo: string;
     bairro: string;
+    IDEquipe: string;
 }

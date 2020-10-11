@@ -46,9 +46,9 @@ export class AppComponent implements OnInit {
 
     this.cadastroservice.buscarEmail(this.logado.email).subscribe(data => {
       if(data.body[0].Total > 0){
-        this.router.navigate(['/home']);
-      }else {
         this.router.navigate(['/']);
+      }else {
+        this.router.navigate(['/cadastro']);
       }
     })
 
