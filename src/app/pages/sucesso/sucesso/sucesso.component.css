@@ -1,18 +1,21 @@
 .image {
     /* Background pattern from Toptal Subtle Patterns */
-    background-image: url("http://ligadoscampeoesdasinuca.epizy.com/wp-content/uploads/2020/10/L-C-S-250-e1602245658571.png"), url("http://ligadoscampeoesdasinuca.epizy.com/wp-content/uploads/2020/10/L-C-S-250-e1602245658571.png"), url("http://ligadoscampeoesdasinuca.epizy.com/wp-content/uploads/2020/10/L-C-S-250-e1602245658571.png"), url("http://ligadoscampeoesdasinuca.epizy.com/wp-content/uploads/2020/10/L-C-S-250-e1602245658571.png");
-    height: 400px;
+    background-image: url("../../../../assets/lcs.png"), url("../../../../assets/lcs.png"), url("../../../../assets/lcs.png"), url("../../../../assets/lcs.png");
+    height: 14rem;
     width: 100%;
     background-repeat: no-repeat, no-repeat;
     background-position: top, left, right, bottom;
+    background-size: 7em, 7em, 7em, 7em;
     padding-top: 25%;
+    padding: 5em;
+    border: solid 10px white;
+    
 }
 
-.header{
-    margin-top: 5rem;
-    font-size: 1.4rem;
-    background: black; 
-    padding: 2rem; 
-    color: white;
-    text-align: center;
+.footer{
+    margin-top: 1rem;
+}
+
+.moldura {
+    border: solid 
 }

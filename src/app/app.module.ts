@@ -19,6 +19,7 @@ import { Equipe } from './models/equipe/equipe';
 import { Cadastro } from './models/cadastro/cadastro';
 import { Cep } from './models/cep/cep';
 import { SucessoComponent } from './pages/sucesso/sucesso/sucesso.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -47,6 +48,7 @@ const keycloakService = new KeycloakService();
     HttpClientModule,
     MatDialogModule,
     MatIconModule,
+    MatTooltipModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

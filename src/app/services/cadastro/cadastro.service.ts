@@ -10,8 +10,8 @@ const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
-// const url = 'http://localhost:3000';
-const url = 'https://api-torneio.herokuapp.com';
+const url = 'http://localhost:5000';
+// const url = 'https://api-torneio.herokuapp.com';
 
 @Injectable({
   providedIn: 'root'

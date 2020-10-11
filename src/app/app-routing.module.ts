@@ -6,7 +6,7 @@ import { SucessoComponent } from './pages/sucesso/sucesso/sucesso.component';
 
 const routes: Routes = [
   { path: '', component: InscritoComponent },
-  { path: 'sucesso', component: SucessoComponent },
+  { path: 'home', component: SucessoComponent },
 ];
 
 @NgModule({
