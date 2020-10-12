@@ -37,7 +37,6 @@
 
 
       <form>
-
         <div class="form-group">
           <div>
             <label for="apelido">CEP</label>
@@ -68,69 +67,79 @@
           <span class="cfpErro" *ngIf="g.invalid  &&  g.touched">Nome de jogador necessário</span>
         </div>
 
-
         <div class="form-group" [formGroup]="emailForm">
-          <label for="exampleFormControlSelect1">Tipo de Equipe</label>
-          <select class="form-control" id="exampleFormControlSelect1" name="representacao"
-            [(ngModel)]="inscrito.representacao" formControlName="representacao"
-            (change)='onChangeRepresentacao($event)' (focus)="onFocuPlace()">
-            <option value=0 selected>Selecione ...</option>
+          <label for="equipe">Tipo de Equipe</label>
+          <select class="form-control" id="equipe" name="equipe" formControlName="equipe" (change)="onChangeEquipe()"
+            [(ngModel)]="inscrito.IDTipoEquipe">
+            <option value=0>Selecione ...</option>
             <option value=1>BAR</option>
             <option value=2>CLUBE</option>
           </select>
-          <span class="cfpErro" *ngIf="i.invalid  &&  i.touched">Selecione uma opção</span>
+          <span class="cfpErro" *ngIf="i.invalid  &&  i.touched">Escolha um tipo de equipe</span>
         </div>
 
-        <div *ngIf="mostrarCEP">
-          <label for="nome">CEP</label>
-        </div>
 
         <div *ngIf="mostrarCEP">
           <div class="form-group" [formGroup]="emailForm">
+            <div>
+              <label for="equipe">CEP da Equipe</label>
+            </div>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" id="cep" name="cep" aria-describedby="cep"
-                placeholder="Informe o CEP do local" [(ngModel)]="local.CEP" mask="00000-000" (focus)="onFocuPlace()" formControlName="cepequipe">
+              <input type="text" class="form-control" placeholder="Informe o CEP da equipe" aria-label="equipe"
+                aria-describedby="equipe" id="equipe" name="equipe" formControlName="cepequipe" mask="00000-000"
+                [(ngModel)]="inscrito.cepEquipe" (focus)="onFocusCEPEquipe()">
               <div class="input-group-append">
-                <button class="btn btn-info botao" type="button" (click)="filterPlace(local)">buscar</button>
+                <button class="btn btn-info botao" type="button" (click)="onChangeCEP()">buscar</button>
               </div>
             </div>
-            <span class="cfpErro" *ngIf="k.invalid  &&  k.touched">CEP necessário</span>
+            <span class="cfpErro" *ngIf="k.invalid  &&  k.touched">Informe o CEP da equipe</span>
+          </div>
+
+          <div class="card" *ngIf="locais.length > 0">
+            <div>
+              <label for="equipe">Equipes:</label>
+            </div>
+
+            <ul>
+              <li *ngFor="let l of locais">{{l.NomeEquipe}}</li>
+            </ul>
+
+
+            <div class="card-body">
+              <h5 class="card-title">ENCONTROU SUA EQUIPE?</h5>
+              <a class="card-link" (click)="onChoose(true)">SIM</a>
+              <a class="card-link" (click)="onChoose(false)">NÃO</a>
+            </div>
           </div>
 
 
-          <div *ngIf="locais.length > 0">
-
-           
-
-            <ul>
-              <li *ngFor="let l of locais" [value]="l.NomeEquipe">{{l.NomeEquipe}}</li>
-            </ul>
-
-            <div class="row" style="margin-top: 2em; margin-bottom: 2em;">
-              <div class="col-sm">
-                <button type="button" class="btn btn-link btn-lg btn-block" style="font-size: 1em;" (click)="shosEquipe(true)">escolher um dessas equipes</button>
-              </div>
-              <div class="col-sm">
-                <button type="button" class="btn btn-link btn-lg btn-block" style="font-size: 1em;" (click)="shosEquipe(false)">cadastrar uma nova equipe</button>
-              </div>
-            </div>
-
-            <div class="form-group" *ngIf="mostrarOpcoes">
-              <label for="equipenome">Selecione um Local</label>
-              <select class="form-control" id="equipenome" name="equipenome" [(ngModel)]="local.NomeEquipe">
-                <option *ngFor="let l of locais" [value]="l.NomeEquipe">{{l.NomeEquipe}}</option>
+          <div *ngIf="this.locais.length > 0 && mostrarEquipes">
+            <div class="form-group">
+              <label for="nomeequipelista">Selecione a equipe</label>
+              <select class="form-control" id="nomeequipelista" name="nomeequipelista">
+                <option *ngFor="let l of locais" value="l.NomeEquipe">{{l.NomeEquipe}}</option>
               </select>
             </div>
           </div>
 
-
-          <div class="form-group" *ngIf="mostrarCadastrar && !mostrarOpcoes">
-            <label for="nomeNovo">Nome do Estabelecimento</label>
-            <input type="text" class="form-control" placeholder="Informe o nome do bar ou clube" name="nomeNovo"
-              [(ngModel)]="local.NomeEquipe" (change)="onChangeNomeEquipe()">
+          <div *ngIf="!mostrarEquipes && mostrarNomeEquipes">
+            <div class="form-group" [formGroup]="emailForm">
+              <label for="nomeequipe">Nome da Equipe</label>
+              <input type="text" class="form-control" id="nomeequipe" name="nomeequipe" aria-describedby="nomeequipe"
+                placeholder="Nome da equipe" formControlName="NomeEquipe" [(ngModel)]="inscrito.NomeEquipe">
+            </div>
+            <span class="cfpErro" *ngIf="m.invalid  &&  m.touched">Informe o nome da Equipe</span>
           </div>
 
+
         </div>
+
+
+
+
+
+
+
 
         <button type="button" class="btn btn-info btn-lg btn-block" (click)="fillTest(inscrito)" id="gerarCodigo"
           style="margin-top: 2em;">Efetuar Cadastro</button>

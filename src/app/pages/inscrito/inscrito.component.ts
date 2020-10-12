@@ -24,11 +24,12 @@ const p = console.log;
 })
 
 export class InscritoComponent implements OnInit {
-  mostrarDados = false;
+  mostrarDados = true;
   mostrarErro = false;
-  mostrarCEP = false;
-  mostrarCadastrar = false;
   mostrarAvisoCPF = false;
+  mostrarCEP = false;
+  mostrarEquipes = false;
+  mostrarNomeEquipes =  false;
   nomeLocal = '';
   objLocal: Equipe[] = [];
   locais: Equipe[] = [];
@@ -41,17 +42,19 @@ export class InscritoComponent implements OnInit {
     apelido: new FormControl('', Validators.required),
     cpf: new FormControl('', Validators.required),
     cep: new FormControl('', Validators.required),
-    representacao: new FormControl('', [Validators.required, Validators.pattern('[1-9]')]),
+    equipe: new FormControl('', [Validators.required, Validators.pattern('[1-9]')]),
     bairro: new FormControl('', Validators.required),
     cepequipe: new FormControl('', Validators.required),
+    NomeEquipe: new FormControl('', Validators.required)
   });
 
   get g(): any { return this.emailForm.get('apelido'); }
   get h(): any { return this.emailForm.get('cpf'); }
-  get i(): any { return this.emailForm.get('representacao'); }
+  get i(): any { return this.emailForm.get('equipe'); }
   get j(): any { return this.emailForm.get('cep'); }
   get k(): any { return this.emailForm.get('cepequipe'); }
   get l(): any { return this.emailForm.get('bairro'); }
+  get m(): any { return this.emailForm.get('NomeEquipe'); }
 
   constructor(
     private cpfservice: CpfService,
@@ -72,9 +75,11 @@ export class InscritoComponent implements OnInit {
     this.inscrito = new Inscrito();
     this.local = new Equipe();
     this.cadastro = new Cadastro();
-    this.inscrito.representacao = 0;
+    this.inscrito.IDTipoEquipe = 0;
+    this.inscrito.NomeEquipe = "SEM EQUIPE";
     this.cadastroservice.buscarEquipes().subscribe(data => {
       this.objLocal = data.body;
+      p(this.objLocal);
     })
 
     this.usuario = new Usuario();
@@ -85,26 +90,13 @@ export class InscritoComponent implements OnInit {
 
   }
 
-  shosEquipe(bool: boolean): void {
-    this.mostrarOpcoes = bool;
-    if (bool) {
-      this.mostrarCadastrar = false;
-    } else {
-      this.mostrarCadastrar = true;
-    }
+  onChangeEquipe(): void {
+    this.mostrarCEP = true;
   }
 
   onFocusCEP(): void {
     this.inscrito.bairro = null;
     this.inscrito.cep = null;
-  }
-
-  onFocuPlace(): void {
-    this.local.CEP = null;
-    this.local.NomeEquipe = null;
-    this.locais = [];
-    this.mostrarCadastrar = false;
-
   }
 
   getCEP(): void {
@@ -113,6 +105,19 @@ export class InscritoComponent implements OnInit {
         this.inscrito.bairro = data.body.bairro + ' - ' + data.body.localidade;
       })
     }
+  }
+
+  onChangeCEP(): void {
+    this.locais = this.objLocal.filter(x => x.CEP === this.inscrito.cepEquipe);
+    this.locais = this.locais.filter(x => x.IDTipoEquipe == this.inscrito.IDTipoEquipe);
+    p(this.objLocal);
+    p(this.inscrito);
+    p(this.locais);
+  }
+
+  onFocusCEPEquipe(): void {
+    this.inscrito.cepEquipe = null;
+    this.locais = [];
   }
 
 
@@ -172,25 +177,10 @@ export class InscritoComponent implements OnInit {
 
   }
 
-  onChangeRepresentacao(event): void {
-    this.mostrarCEP = false;
-    if (event.target.value === '1' || event.target.value === '2') {
-      this.mostrarCEP = true;
-    }
-  }
-
-  onChangeNomeEquipe(): void {
-    this.equipe = new Equipe();
-    this.equipe.NomeEquipe = this.local.NomeEquipe.toUpperCase();
-    this.equipe.IDTipoEquipe = this.inscrito.representacao;
-    this.equipe.CEP = this.local.CEP;
-    this.cadastroservice.salvarEquipe(this.equipe).subscribe(data => {
-      this.equipeservice.mudarIDEquipe(data.body.toString());
-    })
-  }
-
-  onChangeLocal(): void {
-    this.disabled = true;
+  onChoose(bol: boolean): void {
+    this.mostrarEquipes = bol;
+    this.mostrarNomeEquipes = !bol;
+    bol ? this.inscrito.NomeEquipe = "SEM EQUIPE" : this.inscrito.NomeEquipe = null;
   }
 
   onSubmit(): void {
@@ -221,26 +211,6 @@ export class InscritoComponent implements OnInit {
     }
 
 
-  }
-
-  filterPlace(local: Equipe): void {
-    this.mostrarCadastrar = false;
-    this.locais = [];
-    this.local.NomeEquipe = '';
-
-    this.locais = this.objLocal.filter(
-      x => (x.CEP === local.CEP) && ((x.IDTipoEquipe == this.inscrito.representacao))
-    );
-
-    if (this.locais.length === 0) {
-      this.mostrarCadastrar = true;
-    }
-  }
-
-  fillPlace(): void {
-    this.locais = [];
-    this.local.NomeEquipe = null;
-    this.mostrarCadastrar = true;
   }
 
 }
