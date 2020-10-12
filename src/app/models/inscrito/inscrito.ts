@@ -11,4 +11,5 @@ export class Inscrito {
     IDTipoEquipe: number;
     cepEquipe: string;
     NomeEquipe: string;
+    NewNomeEquipe: string;
 }

@@ -24,12 +24,13 @@ const p = console.log;
 })
 
 export class InscritoComponent implements OnInit {
-  mostrarDados = true;
+  mostrarDados = false;
   mostrarErro = false;
   mostrarAvisoCPF = false;
   mostrarCEP = false;
   mostrarEquipes = false;
   mostrarNomeEquipes =  false;
+  mostrarLista = false;
   nomeLocal = '';
   objLocal: Equipe[] = [];
   locais: Equipe[] = [];
@@ -44,8 +45,7 @@ export class InscritoComponent implements OnInit {
     cep: new FormControl('', Validators.required),
     equipe: new FormControl('', [Validators.required, Validators.pattern('[1-9]')]),
     bairro: new FormControl('', Validators.required),
-    cepequipe: new FormControl('', Validators.required),
-    NomeEquipe: new FormControl('', Validators.required)
+    cepequipe: new FormControl('', Validators.required)
   });
 
   get g(): any { return this.emailForm.get('apelido'); }
@@ -54,7 +54,7 @@ export class InscritoComponent implements OnInit {
   get j(): any { return this.emailForm.get('cep'); }
   get k(): any { return this.emailForm.get('cepequipe'); }
   get l(): any { return this.emailForm.get('bairro'); }
-  get m(): any { return this.emailForm.get('NomeEquipe'); }
+
 
   constructor(
     private cpfservice: CpfService,
@@ -73,13 +73,12 @@ export class InscritoComponent implements OnInit {
 
   ngOnInit(): void {
     this.inscrito = new Inscrito();
-    this.local = new Equipe();
+    this.equipe = new Equipe();
     this.cadastro = new Cadastro();
     this.inscrito.IDTipoEquipe = 0;
     this.inscrito.NomeEquipe = "SEM EQUIPE";
     this.cadastroservice.buscarEquipes().subscribe(data => {
       this.objLocal = data.body;
-      p(this.objLocal);
     })
 
     this.usuario = new Usuario();
@@ -110,14 +109,14 @@ export class InscritoComponent implements OnInit {
   onChangeCEP(): void {
     this.locais = this.objLocal.filter(x => x.CEP === this.inscrito.cepEquipe);
     this.locais = this.locais.filter(x => x.IDTipoEquipe == this.inscrito.IDTipoEquipe);
-    p(this.objLocal);
-    p(this.inscrito);
-    p(this.locais);
+    this.mostrarLista = true;
+
   }
 
   onFocusCEPEquipe(): void {
     this.inscrito.cepEquipe = null;
     this.locais = [];
+    this.mostrarLista = false;
   }
 
 
@@ -177,42 +176,51 @@ export class InscritoComponent implements OnInit {
 
   }
 
-  onChoose(bol: boolean): void {
+  onChoose(bol: boolean): boolean {
+    this.inscrito.NomeEquipe = null;
     this.mostrarEquipes = bol;
     this.mostrarNomeEquipes = !bol;
-    bol ? this.inscrito.NomeEquipe = "SEM EQUIPE" : this.inscrito.NomeEquipe = null;
+    return bol;
   }
 
-  onSubmit(): void {
-    this.equipeservice.currentMessage.subscribe(data => {
-      if (data.toString().length > 0) {
-        this.cadastro.IDEquipe = data.toString();
+  save(): void {
+    if (this.emailForm.status === 'INVALID') {
+      this.openDialog();
+    } else {
+      this.equipe.CEP = this.inscrito.cepEquipe;
+      this.equipe.IDEquipe = parseInt(this.inscrito.IDEquipe);
+      this.equipe.IDTipoEquipe = <number> this.inscrito.IDTipoEquipe;
+     
+      this.cadastroservice.salvarEquipe(this.equipe).subscribe(data => {
+        this.cadastro.IDEquipe = data.body;
         this.cadastro.CPF = this.inscrito.cpf;
         this.cadastro.NickName = this.inscrito.apelido;
         this.cadastro.NomeInscrito = this.usuario.firstName + ' ' + this.usuario.lastName;
         this.cadastro.CEP = this.inscrito.cep;
         this.cadastro.Email = this.usuario.email;
-
+        
         this.cadastroservice.salvarCadastro(this.cadastro).subscribe(data => {
           this.router.navigate(['/']);
-        }, error => {
-          console.error(error);
-        })
-      }
-    });
-  }
-
-  fillTest(inscricao: Inscrito): void {
-
-    if (this.emailForm.status === 'INVALID') {
-      this.openDialog();
-    } else {
-      this.onSubmit();
+        }, error => console.error(error))
+      }, error => console.error(error));
     }
-
-
   }
+  
+  onSubmit(): void {
 
+    if( this.locais.length > 0 && this.mostrarEquipes){
+      this.equipe.NomeEquipe = this.inscrito.NomeEquipe;
+      this.save();
+    } else {
+      if(!this.inscrito.NewNomeEquipe){
+        this.openDialog();
+      } else {
+        p(this.inscrito);
+        this.equipe.NomeEquipe = this.inscrito.NewNomeEquipe;
+        this.save();
+      }
+    }            
+  }
 }
 
 

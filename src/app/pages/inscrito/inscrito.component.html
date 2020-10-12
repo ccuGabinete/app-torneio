@@ -95,7 +95,7 @@
             <span class="cfpErro" *ngIf="k.invalid  &&  k.touched">Informe o CEP da equipe</span>
           </div>
 
-          <div class="card" *ngIf="locais.length > 0">
+          <div class="card" *ngIf="mostrarLista">
             <div>
               <label for="equipe">Equipes:</label>
             </div>
@@ -116,22 +116,20 @@
           <div *ngIf="this.locais.length > 0 && mostrarEquipes">
             <div class="form-group">
               <label for="nomeequipelista">Selecione a equipe</label>
-              <select class="form-control" id="nomeequipelista" name="nomeequipelista">
+              <select class="form-control" id="nomeequipelista" name="nomeequipelista"
+                [(ngModel)]="inscrito.NomeEquipe">
                 <option *ngFor="let l of locais" value="l.NomeEquipe">{{l.NomeEquipe}}</option>
               </select>
             </div>
           </div>
 
           <div *ngIf="!mostrarEquipes && mostrarNomeEquipes">
-            <div class="form-group" [formGroup]="emailForm">
+            <div class="form-group">
               <label for="nomeequipe">Nome da Equipe</label>
-              <input type="text" class="form-control" id="nomeequipe" name="nomeequipe" aria-describedby="nomeequipe"
-                placeholder="Nome da equipe" formControlName="NomeEquipe" [(ngModel)]="inscrito.NomeEquipe">
+              <input type="text" class="form-control" id="newnomeequipe" name="newnomeequipe"
+                aria-describedby="newnomeequipe" placeholder="Nome da equipe" [(ngModel)]="inscrito.NewNomeEquipe">
             </div>
-            <span class="cfpErro" *ngIf="m.invalid  &&  m.touched">Informe o nome da Equipe</span>
           </div>
-
-
         </div>
 
 
@@ -141,7 +139,7 @@
 
 
 
-        <button type="button" class="btn btn-info btn-lg btn-block" (click)="fillTest(inscrito)" id="gerarCodigo"
+        <button type="button" class="btn btn-info btn-lg btn-block" (click)="onSubmit()" id="gerarCodigo"
           style="margin-top: 2em;">Efetuar Cadastro</button>
       </form>
     </div>
