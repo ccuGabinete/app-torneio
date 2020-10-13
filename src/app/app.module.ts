@@ -79,7 +79,7 @@ export class AppModule implements DoBootstrap {
       .init({
         config: {
           url: 'https://adrenalinamaxima.com.br/auth/',
-          realm: 'Liga dos Campeões da Sinuca',
+          realm: 'LCS',
           clientId: 'torneio-inscricao'
         },
         initOptions: {
