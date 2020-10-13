@@ -21,6 +21,9 @@ import { Cep } from './models/cep/cep';
 import { SucessoComponent } from './pages/sucesso/sucesso/sucesso.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Usuario } from './models/usuario/usuario';
+import { AdminComponent } from './pages/admin/admin/admin.component';
+import { ColaboradorComponent } from './pages/colaborador/colaborador/colaborador.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -36,7 +39,9 @@ const keycloakService = new KeycloakService();
   declarations: [
     AppComponent,
     InscritoComponent,
-    SucessoComponent
+    SucessoComponent,
+    AdminComponent,
+    ColaboradorComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +55,7 @@ const keycloakService = new KeycloakService();
     MatDialogModule,
     MatIconModule,
     MatTooltipModule,
+    MatExpansionModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

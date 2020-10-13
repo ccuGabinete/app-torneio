@@ -118,7 +118,7 @@
               <label for="nomeequipelista">Selecione a equipe</label>
               <select class="form-control" id="nomeequipelista" name="nomeequipelista"
                 [(ngModel)]="inscrito.NomeEquipe">
-                <option *ngFor="let l of locais" value="l.NomeEquipe">{{l.NomeEquipe}}</option>
+                <option *ngFor="let l of locais" [value]="l.NomeEquipe">{{l.NomeEquipe}}</option>
               </select>
             </div>
           </div>

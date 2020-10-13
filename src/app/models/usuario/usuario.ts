@@ -4,4 +4,5 @@ export class Usuario {
     firstName: string;
     lastName: string;
     username: string;
+    rules: String[];
 }

@@ -15,21 +15,23 @@ export class AppComponent implements OnInit {
   title = 'app-torneio';
   usuario = '';
 
+
   constructor(
     public keycloakService: KeycloakService,
     private router: Router,
     private logadoservice: LogadoService,
     public logado: Usuario,
     private cadastroservice: CadastroService
-    ) {}
+  ) { }
 
-  logout(){
+  logout() {
     this.router.navigate(['/']);
     window.open("http://ligadoscampeoesdasinuca.epizy.com/", "_blank");
     this.keycloakService.logout();
   }
 
   async ngOnInit(): Promise<void> {
+    f(this.keycloakService.getUserRoles());
     let user = await this.keycloakService.loadUserProfile();
     this.logado = new Usuario();
     this.logado.email = user.email;
@@ -37,23 +39,30 @@ export class AppComponent implements OnInit {
     this.logado.firstName = user.firstName;
     this.logado.lastName = user.lastName;
     this.logado.username = user.username;
-    
+    this.logado.rules = this.keycloakService.getUserRoles();
+
+    f(this.logado.rules.indexOf('admin'));
+
+
     this.logadoservice.mudarUsuario(this.logado);
     this.usuario = user.firstName + ' ' + user.lastName;
-    if(this.keycloakService.isTokenExpired()) {
+    if (this.keycloakService.isTokenExpired()) {
       this.logout();
     }
 
     this.cadastroservice.buscarEmail(this.logado.email).subscribe(data => {
-      if(data.body[0].Total > 0){
-        this.router.navigate(['/']);
-      }else {
+      if (data.body[0].Total > 0) {
+        if (this.logado.rules.indexOf('admin') !== -1) {
+          this.router.navigate(['/admin']);
+        } else if (this.logado.rules.indexOf('colaborador') !== -1) {
+          this.router.navigate(['/colaborador']);
+          f('cheguei aqui!!!');
+        } else {
+          this.router.navigate(['/']);
+        }
+      } else {
         this.router.navigate(['/cadastro']);
       }
     })
-
   }
-
-  
-  
 }
