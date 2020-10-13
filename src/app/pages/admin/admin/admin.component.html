@@ -11,15 +11,21 @@
 
         <form>
             <div class="form-group">
-                <label for="nometorneio">Nome do torneio</label>
+                <label for="nometorneio">Nome do Torneio</label>
                 <input type="text" class="form-control" id="nometorneio" name="nometorneio"
-                    placeholder="Nome do torneio" mask="00000-000">
+                    placeholder="Nome do torneio">
             </div>
+
+            <div class="form-group">
+                <label for="nometorneio">Data do Torneio</label>
+                <input type="date" class="form-control" id="data" name="data">
+            </div>
+            
 
             <div class="form-group">
                 <label for="nometorneio">CEP</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Informe o CEP">
+                    <input type="text" class="form-control" placeholder="Informe o CEP"  mask="00000-000">
                     <div class="input-group-append">
                         <button class="btn btn-info botao" type="button">buscar</button>
                     </div>

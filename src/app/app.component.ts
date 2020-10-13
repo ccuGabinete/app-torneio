@@ -31,7 +31,6 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    f(this.keycloakService.getUserRoles());
     let user = await this.keycloakService.loadUserProfile();
     this.logado = new Usuario();
     this.logado.email = user.email;
@@ -40,9 +39,6 @@ export class AppComponent implements OnInit {
     this.logado.lastName = user.lastName;
     this.logado.username = user.username;
     this.logado.rules = this.keycloakService.getUserRoles();
-
-    f(this.logado.rules.indexOf('admin'));
-
 
     this.logadoservice.mudarUsuario(this.logado);
     this.usuario = user.firstName + ' ' + user.lastName;
@@ -56,7 +52,6 @@ export class AppComponent implements OnInit {
           this.router.navigate(['/admin']);
         } else if (this.logado.rules.indexOf('colaborador') !== -1) {
           this.router.navigate(['/colaborador']);
-          f('cheguei aqui!!!');
         } else {
           this.router.navigate(['/']);
         }
