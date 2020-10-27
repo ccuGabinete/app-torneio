@@ -21,10 +21,12 @@ import { Cep } from './models/cep/cep';
 import { SucessoComponent } from './pages/sucesso/sucesso/sucesso.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Usuario } from './models/usuario/usuario';
-import { AdminComponent } from './pages/admin/admin/admin.component';
-import { ColaboradorComponent } from './pages/colaborador/colaborador/colaborador.component';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { InscricaoComponent } from './pages/inscricao/inscricao/inscricao.component';
+import { Torneio } from './models/torneio/torneio';
+import { Jogador } from './models/jogador/jogador';
+import { TorneiosComponent } from './pages/torneios/torneios/torneios.component';
+import { Ranking } from './models/ranking/ranking';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
@@ -40,8 +42,8 @@ const keycloakService = new KeycloakService();
     AppComponent,
     InscritoComponent,
     SucessoComponent,
-    AdminComponent,
-    ColaboradorComponent
+    InscricaoComponent,
+    TorneiosComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +74,9 @@ const keycloakService = new KeycloakService();
     Cadastro,
     Cep,
     Usuario,
+    Torneio,
+    Jogador,
+    Ranking,
     {
       provide: KeycloakService,
       useValue: keycloakService,

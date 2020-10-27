@@ -1,0 +1,46 @@
+<mat-accordion>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Ranking Geral
+            </mat-panel-title>
+            <mat-panel-description>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="card">
+            <div class="card-body">
+                {{posGeral}}ª posição
+            </div>
+        </div>
+
+    </mat-expansion-panel>
+
+
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Ranking Torneios
+            </mat-panel-title>
+            <mat-panel-description>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <select class="form-control" id="torneios" name="torneios" [(ngModel)]="idtorneio" (change)="onChangeTorneios(idtorneio)">
+            <option selected value="-1">Selecione</option>
+            <option *ngFor="let p of torneios" [value]="p.pos">{{p.data}}</option>
+        </select>
+
+        <div class="card" *ngIf="idtorneio != -1">
+            <div class="card-body">
+                {{posTorneio}}ª posição
+            </div>
+        </div>
+
+    </mat-expansion-panel>
+
+</mat-accordion>
+
+<div class="footer">
+    <button type="button" class="btn btn-outline-dark btn-lg btn-block" (click)="onInicio()">início</button>
+</div>

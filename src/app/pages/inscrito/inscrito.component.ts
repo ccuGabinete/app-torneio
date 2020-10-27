@@ -1,4 +1,3 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -57,7 +56,6 @@ export class InscritoComponent implements OnInit {
 
 
   constructor(
-    private cpfservice: CpfService,
     public inscrito: Inscrito,
     public equipe: Equipe,
     public local: Equipe,
@@ -67,9 +65,7 @@ export class InscritoComponent implements OnInit {
     private cepservice: CepService,
     private router: Router,
     private logadoservice: LogadoService,
-    public usuario: Usuario,
-    private equipeservice: EquipeService
-  ) { }
+    public usuario: Usuario  ) { }
 
   ngOnInit(): void {
     this.inscrito = new Inscrito();
@@ -158,7 +154,7 @@ export class InscritoComponent implements OnInit {
     this.inscrito.cpf = null;
   }
 
-  onFindCPF(cpf: string): void {
+  onFindCPF(): void {
     this.mostrarAvisoCPF = false;
 
     if (this.onCPF()) {
@@ -199,7 +195,7 @@ export class InscritoComponent implements OnInit {
         this.cadastro.CEP = this.inscrito.cep;
         this.cadastro.Email = this.usuario.email;
         
-        this.cadastroservice.salvarCadastro(this.cadastro).subscribe(data => {
+        this.cadastroservice.salvarCadastro(this.cadastro).subscribe(() => {
           this.router.navigate(['/']);
         }, error => console.error(error))
       }, error => console.error(error));

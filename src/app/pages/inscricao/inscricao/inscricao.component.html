@@ -1,0 +1,68 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Torneios previstos
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="table-responsive">
+      <table class="table table-hover table-dark">
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Bairro</th>
+            <th scope="col">Local</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of previstos">
+            <th scope="row">{{p.Data}}</th>
+            <td>{{p.Bairro}}</td>
+            <td>{{p.Logradouro}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </mat-expansion-panel>
+  <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Torneios abertos
+      </mat-panel-title>
+      <mat-panel-description>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="table-responsive">
+      <table class="table table-hover table-dark">
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Bairro</th>
+            <th scope="col">Local</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of abertos">
+            <th scope="row">{{p.Data}}</th>
+            <td>{{p.Bairro}}</td>
+            <td>{{p.Logradouro}}</td>
+            <td>
+              <button type="button" class="btn btn-light btn-sm" (click)=onInscricao(p.IDTorneio)>inscrição</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </mat-expansion-panel>
+
+</mat-accordion>
+
+<div class="footer">
+  <button type="button" class="btn btn-outline-dark btn-lg btn-block" (click)="onInicio()">início</button>
+</div>

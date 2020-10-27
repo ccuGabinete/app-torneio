@@ -12,7 +12,7 @@
               mask="000.000.000-00" [(ngModel)]="inscrito.cpf" name="cpf" (focus)='onFocusCPF()' (change)="onCPF()"
               formControlName="cpf">
             <div class="input-group-append">
-              <button type="button" class="btn btn-info botao" (click)="onFindCPF(inscrito.cpf)" id="findCPF"
+              <button type="button" class="btn btn-info botao" (click)="onFindCPF()" id="findCPF"
                 matTooltip="CPF usado para a entrega do prêmio" [matTooltipPosition]="positionOptions[2]">
                 validar
               </button>
@@ -131,12 +131,6 @@
             </div>
           </div>
         </div>
-
-
-
-
-
-
 
 
         <button type="button" class="btn btn-info btn-lg btn-block" (click)="onSubmit()" id="gerarCodigo"
